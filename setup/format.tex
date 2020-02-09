@@ -1,0 +1,436 @@
+% !Mode:: "TeX:UTF-8"
+\usepackage[utf8]{inputenc}
+%%是否打印答案的布尔变量
+\newboolean{printanswers}
+\newboolean{twopagenum}
+%%定义试卷题头必要的宏
+\makeatletter
+\def\coursecode#1{\def\@coursecode{#1}}\def\@coursecode{}%课程代码
+\def\coursename#1{\def\@coursename{#1}}\def\@coursename{}%课程名称
+\def\courseyear#1{\def\@courseyear{#1}}\def\@courseyear{}%课程年份
+\def\courseterm#1{\def\@courseterm{#1}}\def\@courseterm{}%考试学期
+\def\specialty#1{\def\@specialty{#1}}\def\@specialty{}%专业
+\def\grade#1{\def\@grade{#1}}\def\@grade{}%年级
+\def\exammode#1{\def\@exammode{#1}}\def\@exammode{}%考核方式
+\def\examtime#1{\def\@examtime{#1}}\def\@examtime{}%考试时量
+\def\examtype#1{\def\@examtype{#1}}\def\@examtype{}%考核类型
+\makeatother
+%%中英文字体设置
+\setCJKfamilyfont{zhsong}[AutoFakeBold = {2.17}]{SimSun}% 宋体字
+\renewcommand*{\songti}{\CJKfamily{zhsong}}%加了这条命令才能宋体加粗显示
+\setlength{\headheight}{20pt}%页眉高度
+\setlength{\baselineskip}{24pt}%设置行间距
+\setmainfont{Times New Roman}%西文主要字体设置为Times New Roman
+\setsansfont{Arial}
+%%大题计数器
+\newcounter{dati}%设计一个自己的计数器,名字叫dati
+\setcounter{dati}{0}%计数器初始赋值为零
+%%设置有无分隔线
+%\columnseprule=0.4pt%试卷分隔线的宽度
+%%定义试卷题头
+\makeatletter
+\newcommand{\examtitle}[7]{
+	\ifthenelse{\boolean{printanswers}}
+	{
+		\heiti\zihao{-3}%设置字体字号小三黑体
+		湖南师范大学{\@courseyear}~学年第{\@courseterm}学期~{\@specialty}~{\@grade}~级\heiti\zihao{5}{期末/补考/重修}\heiti\zihao{-3}课程\\
+		\uline{\@coursename}考核试题标准答案及评分细则
+		\newline
+		\vspace{2mm}
+		\zihao{-4}\songti
+		\bf{课程代码：~{\@coursecode}~~考核方式：~{\@exammode}~~~~~~~考试时量：~{\@examtime}~分钟~~试卷类型：~{\@examtype}}
+	}
+	{\heiti\zihao{-3}%设置字体字号小三黑体
+		湖南师范大学工程与设计学院\\
+		{\@courseyear}~学年第{\@courseterm}学期~{\@specialty}~{\@grade}~级\\
+		《{\@coursename}》课程期末/补考考试试题
+		\newline
+		\vspace{2mm}
+		\zihao{-4}\songti
+		课程代码：~{\@coursecode}~~考核方式：~{\@exammode}~~~~~~~考试时量：~{\@examtime}~分钟~~试卷类型：~{\@examtype}
+		\examscoretable{#1}{#2}{#3}{#4}{#5}{#6}{#7}
+	}
+}
+\makeatother
+%%定义总计分表头
+\newcommand{\examscoretable}[7]{
+	\begin{table}[h]
+		\zihao{-4}\songti%设置字体为小四宋体;
+		\centering%居中
+		\setlength{\tabcolsep}{2.8mm}
+		\renewcommand\arraystretch{1.5}%表格缩放1.5倍;
+		\begin{tabular}{*{11}{|c}|}%总共11个格子;
+			\hline
+			\raisebox{-3pt}{题号} & \raisebox{-3pt}{一} &\raisebox{-3pt}{二}&\raisebox{-3pt}{三} &\raisebox{-3pt}{ 四 }& \raisebox{-3pt}{五} & \raisebox{-3pt}{六} & \raisebox{-3pt}{七} & \raisebox{-3pt}{总分}&\raisebox{-3pt}{合分人}&\raisebox{-3pt}{复查人} \\[2mm]
+			\hline
+			\raisebox{-3pt}{应得分}&\raisebox{-3pt}{#1}&\raisebox{-3pt}{#2}&\raisebox{-3pt}{#3}&\raisebox{-3pt}{#4}&\raisebox{-3pt}{#5}&\raisebox{-3pt}{#6}&\raisebox{-3pt}{#7}&\raisebox{-3pt}{100}&\multirow{2}{*}{}& \\[2mm]% 各个小题分值
+			\cline{1-9}
+			\raisebox{-3pt}{实得分}&&&&&&&&&& \\[2mm]
+			\hline
+		\end{tabular}
+	\end{table}
+}
+%%定义常用命题计分表头
+\newcommand{\makepart}[3]{%总共控制3个参数
+	\stepcounter{dati}%每进来一次，大题计数器加一;
+	\ifthenelse{\boolean{printanswers}}
+	{
+		\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（每小题~#2~分，共~#3~分）}}
+	{
+		\noindent\hspace{-0.4cm}\begin{minipage}{16cm}
+			\parpic[l]{
+				\noindent
+				\setlength{\tabcolsep}{2.8mm}
+				\renewcommand\arraystretch{1.1}
+				\begin{tabular}{|c|c|c|}
+					\hline \raisebox{-3pt}{得分}&\raisebox{-3pt}{评卷人}&\raisebox{-3pt}{复查人} \\[2mm]
+					\hline & & \\[2mm]
+					\hline
+				\end{tabular}
+			}
+			\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（每小题~#2~分，共~#3~分）}
+		\end{minipage}\\\\
+	}
+
+}
+%%定义填空题命题计分表头
+\newcommand{\makeparttk}[3]{%总共控制3个参数
+	\stepcounter{dati}%每进来一次，大题计数器加一;
+		\ifthenelse{\boolean{printanswers}}
+		{
+		\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（每空~#2~分，共~#3~分）}
+		}
+		{
+		\noindent\hspace{-0.4cm}
+		\begin{minipage}{16cm}
+		\parpic[l]{
+			\noindent
+			\setlength{\tabcolsep}{2.8mm}
+			\renewcommand\arraystretch{1.1}
+			\begin{tabular}{|c|c|c|}
+				\hline \raisebox{-3pt}{得分}&\raisebox{-3pt}{评卷人}&\raisebox{-3pt}{复查人} \\[2mm]
+				\hline & & \\[2mm]
+				\hline
+			\end{tabular}
+		}
+		\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（每空~#2~分，共~#3~分）}
+		\end{minipage}\\\\
+		}
+	
+}
+%%定义单选题命题计分表头
+\newcommand{\makepartdx}[3]{%总共控制3个参数
+	\stepcounter{dati}%每进来一次，大题计数器加一;
+	\ifthenelse{\boolean{printanswers}}
+	{
+		\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（在本题的每一小题的备选答案中，只有一个答案是正确的，请把你认为正确答案的题号，填入题干的括号内。多选不给分。每题#2分，共#3分）}
+	}
+	{	\noindent\hspace{-0.4cm}\begin{minipage}{14.5cm}
+			\parpic[l]{
+				\noindent
+				\setlength{\tabcolsep}{2.8mm}
+				\renewcommand\arraystretch{1.1}
+				\begin{tabular}{|c|c|c|}
+					\hline \raisebox{-3pt}{得分}&\raisebox{-3pt}{评卷人}&\raisebox{-3pt}{复查人} \\[2mm]
+					\hline & & \\[2mm]
+					\hline
+				\end{tabular}
+			}
+			\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（在本题的每一小题的备选答案中，只有一个答案是正确的，请把你认为正确答案的题号，填入题干的括号内。多选不给分。每题#2分，共#3分）}
+		\end{minipage}\\\\
+	}
+
+}
+%%定义不常用命题题头
+\newcommand{\makepartnoteq}[3]{%总共控制3个参数
+	\stepcounter{dati}%每进来一次，大题计数器加一;
+		\ifthenelse{\boolean{printanswers}}
+		{
+		\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（本大题共~#2~小题，共~#3~分）}
+		}
+		{\noindent\hspace{-0.4cm}\begin{minipage}{16cm}
+				\parpic[l]{
+					\noindent
+					\setlength{\tabcolsep}{2.8mm}
+					\renewcommand\arraystretch{1.1}
+					\begin{tabular}{|c|c|c|}
+						\hline \raisebox{-3pt}{得分}&\raisebox{-3pt}{评卷人}&\raisebox{-3pt}{复查人} \\[2mm]
+						\hline & & \\[2mm]
+						\hline
+					\end{tabular}
+				}
+			\noindent\textbf{\zihao{-4}\songti\zhnum{dati}、#1（本大题共~#2~小题，共~#3~分）}
+			\end{minipage}\\\\
+		}
+
+}
+%%不同页码输出格式
+\newcommand{\pagenumstyle}{%\ifthenelse{判断条件}{肯定结构}{否定结构}
+\ifthenelse{\boolean{twopagenum}}{%一面的两栏都有页码
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyfoot[CO,CE]{共~\the\numexpr2*\getpagerefnumber{mylastpage}\relax~页~~~~第~\the\numexpr2*\value{page}-1\relax~页~~\hspace*{.4\linewidth}共~\the\numexpr2*\getpagerefnumber{mylastpage}\relax~页~~~~第~\the\numexpr2*\value{page}\relax~页}
+	\ifthenelse{\boolean{printanswers}}
+	{
+	}
+	{
+	\fancyhead[RE]{\leavevmode\vbox to0pt{
+			\vss\rlap{\putzdxx }\vskip -26cm }}%奇数页眉的右边
+	\fancyhead[LO]{\leavevmode\vbox to0pt{
+			\vss\rlap{\putzdx }\vskip -26cm }} %偶数页眉的左边
+	}
+}
+{%一面只一个页码
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[CO,CE]{第~\thepage~页~~共~\pageref{LastPage}~页}
+\ifthenelse{\boolean{printanswers}}
+{
+}
+{
+\fancyhead[RE]{\leavevmode\vbox to0pt{
+		\vss\rlap{\putzdxx }\vskip -26cm }} %奇数页眉的右边                       
+\fancyhead[LO]{\leavevmode\vbox to0pt{
+		\vss\rlap{\putzdx }\vskip -26cm }} %偶数页眉的左边
+}
+}
+}
+%%正面姓名栏+密封线
+\newsavebox{\zdxa}
+\sbox{\zdxa}
+{\parbox{27cm}{\centering \zihao{4}\songti \hspace{1cm}
+		学院：\underline{\makebox[28mm][c]{}}~~~ 专业/班级：\underline{\makebox[28mm][c]{}}~~~ 姓名：\underline{\makebox[28mm][c]{}}~~~ 学号：\underline{\makebox[28mm][c]{}}~~~座位号：\underline{\makebox[10mm][c]{}} \\
+		\vspace{-1mm}
+%		请在所附答题纸上空出密封位置。并填写学院、专业/班级、学号、姓名和座位号\\
+		\zihao{5}\songti
+		\dotfill\\
+		\vspace{-1mm}%调整装订虚线位置，上移1mm
+		装~~~~~~~~订~~~~~~~~线~~~~~~~~内~~~~~~~~不~~~~~~~~要~~~~~~~~答~~~~~~~~题\\
+		\vspace{-3mm}%调整装订虚线位置，上移3mm
+\dotfill
+}
+}
+%%背面装订线
+\newsavebox{\zdxb}
+\sbox{\zdxb}
+{\parbox{27cm}{\centering%指定方框高度
+		\zihao{5}\songti
+		\dotfill\\
+		\vspace{-1mm}%调整装订虚线位置，上移1mm
+		装~~~~~~~~订~~~~~~~~线~~~~~~~~内~~~~~~~~不~~~~~~~~要~~~~~~~~答~~~~~~~~题\\
+		\vspace{-3mm}%调整装订虚线位置，上移3mm
+		\dotfill
+}
+}
+%%诚信考试框
+\newsavebox{\zdxc}
+\sbox{\zdxc}{
+	\begin{tabular}{|c|}
+		\hline \raisebox{-3pt}{\textbf{\songti\zihao{-3} 诚信参考，考试舞弊将带来严重后果！}}  \\[2mm]
+		\hline
+	\end{tabular}
+}
+%%教务办填写框
+\newsavebox{\zdxd}
+\sbox{\zdxd}{
+	\songti\zihao{-4}
+	\renewcommand\arraystretch{0.8}\begin{tabular}{|c|}
+		\hline \raisebox{-3pt}{教务办填写}\\[2mm]
+		\hline \raisebox{-3pt}{\underline{~~~~~~}年\underline{~~~~}月\underline{~~~~}日} \\[2mm]
+		\hline \raisebox{-3pt}{考~~~~试~~~~用}\\[2mm]
+		\hline
+	\end{tabular}%~~~~
+}
+%设置正面密封线的摆放位置
+\newcommand{\putzdx}{%设置正面密封线的摆放位置
+		\hspace{-20mm}\parbox{1cm}{
+			\rotatebox[origin=c]{90}{
+				\usebox{\zdxa}
+		}}
+}
+%设置背面密封线的摆放位置
+\newcommand{\putzdxx}{%设置背面密封线的摆放位置
+	\hspace{4mm}\parbox{1cm}{
+		\rotatebox[origin=c]{-90}{
+			\usebox{\zdxb}
+	}}
+}
+%%放置诚信和教务填写表格
+\def\examothertable{
+	\ifthenelse{\boolean{printanswers}}{}{
+	\begin{figure}[t]
+	\begin{center}
+		\begin{picture}(1,1)(230,0)% 第一个括号定义尺寸，后一个括号定位坐标
+		\put(12,0){\rotatebox[origin=c]{0}{\usebox{\zdxc}}}%诚信考试框
+		\put(340,-15){\rotatebox[origin=c]{0}{\usebox{\zdxd}}}%教务办填写框
+		\end{picture}
+	\end{center}
+	\end{figure}}
+	
+}
+%%\newcommand\cmd[参数个数][参数的默认值]{命令的定义}
+%%填空题用横线
+%%根据答案留大小,前后默认多留0.5cm;\tkhx[1]{}答案前后多留1cm;
+\newcommand{\tkhx}[2][0.5]{\;\uline{
+		\hspace*{#1 cm}
+		\ifthenelse{\boolean{printanswers}}{#2}{\hphantom{#2}}
+		\hspace*{#1 cm}
+}
+}
+%%填空题用括号
+%%根据答案留大小,前后默认多留0.5cm;\tkhx[1]{}答案前后多留1cm;
+\newcommand{\tkkh}[2][0.5]{\;(
+		\hspace*{#1 cm}
+		\ifthenelse{\boolean{printanswers}}{#2}{\hphantom{#2}}
+		\hspace*{#1 cm})
+}
+%%选择题选项命令
+%%\xx{}{}{}{} 四选项;
+%%选项自动对齐；
+\newlength{\la}
+\newlength{\lb}
+\newlength{\lc}
+\newlength{\ld}
+\newlength{\lee}
+\newlength{\lf}
+\newlength{\lhalf}
+\newlength{\lquarter}
+\newlength{\lmax}
+\newcommand{\xx}[4]{\\[.5pt]%  
+	\settowidth{\la}{A、#1~~~}
+	\settowidth{\lb}{B、#2~~~}
+	\settowidth{\lc}{C、#3~~~}
+	\settowidth{\ld}{D、#4~~~}
+	\ifthenelse{\lengthtest{\la > \lb}}
+	{\setlength{\lmax}{\la}}{\setlength{\lmax}{\lb}}
+		\ifthenelse{\lengthtest{\lmax < \lc}}  {\setlength{\lmax}{\lc}}{}
+		\ifthenelse{\lengthtest{\lmax < \ld}}{\setlength{\lmax}{\ld}}{}
+		\setlength{\lhalf}{0.5\linewidth}
+		\setlength{\lquarter}{0.25\linewidth}
+		\ifthenelse{\lengthtest{\lmax > \lhalf}}
+		{\noindent{}A、#1 \\ B、#2 \\ C、#3 \\ D、#4 }  {  \ifthenelse{\lengthtest{\lmax > \lquarter}}  
+			{\noindent
+			\makebox[\lhalf][l]{A、#1~~~}% 
+			\makebox[\lhalf][l]{B、#2~~~}\\%
+			\makebox[\lhalf][l]{C、#3~~~}%
+			\makebox[\lhalf][l]{D、#4~~~}}% 
+			{\noindent\makebox[\lquarter][l]{A、#1~~~}% 
+			\makebox[\lquarter][l]{B、#2~~~}%     
+			\makebox[\lquarter][l]{C、#3~~~}%      
+			\makebox[\lquarter][l]{D、#4~~~}}
+		}}
+%%\xxiii{}{}{} 三选项;
+\newcommand{\xxiii}[3]{\\[.5pt]%  
+	\settowidth{\la}{A、#1~~~}  
+	\settowidth{\lb}{B、#2~~~}
+	\settowidth{\lc}{C、#3~~~}  
+	\ifthenelse{\lengthtest{\la > \lb}}
+	{\setlength{\lmax}{\la}}{\setlength{\lmax}{\lb}}  
+	\ifthenelse{\lengthtest{\lmax < \lc}}  {\setlength{\lmax}{\lc}}  {}  
+	\setlength{\lhalf}{0.5\linewidth} 
+	\setlength{\lquarter}{0.25\linewidth}
+	\ifthenelse{\lengthtest{\lmax > \lhalf}}  
+	{\noindent{}A、#1 \\ B、#2 \\ C、#3 }  {  \ifthenelse{\lengthtest{\lmax > \lquarter}}  
+		{\noindent
+			\makebox[\lhalf][l]{A、#1~~~}% 
+			\makebox[\lhalf][l]{B、#2~~~}\\%
+			\makebox[\lhalf][l]{C、#3~~~}}% 
+		{\noindent
+			\makebox[\lquarter][l]{A、#1~~~}% 
+			\makebox[\lquarter][l]{B、#2~~~}%     
+			\makebox[\lquarter][l]{C、#3~~~}}
+}}
+%%\xxv{}{}{}{}{} 五选项;
+\newcommand{\xxv}[5]{\\[.5pt]%  
+	\settowidth{\la}{A、#1~~~}  
+	\settowidth{\lb}{B、#2~~~}
+	\settowidth{\lc}{C、#3~~~} 
+	\settowidth{\ld}{D、#4~~~}  
+	\settowidth{\lee}{E、#5~~~}   
+	\ifthenelse{\lengthtest{\la > \lb}}
+	{\setlength{\lmax}{\la}}{\setlength{\lmax}{\lb}}  
+	\ifthenelse{\lengthtest{\lmax < \lc}}  {\setlength{\lmax}{\lc}}  {} 
+	\ifthenelse{\lengthtest{\lmax < \ld}}  {\setlength{\lmax}{\ld}}  {} 
+	\ifthenelse{\lengthtest{\lmax < \lee}}  {\setlength{\lmax}{\lee}}  {} 
+	\setlength{\lhalf}{0.5\linewidth} 
+	\setlength{\lquarter}{0.25\linewidth}
+	\ifthenelse{\lengthtest{\lmax > \lhalf}}  
+	{\noindent{}A、#1 \\ B、#2 \\ C、#3 \\ D、#4 \\ E、#5}  {  \ifthenelse{\lengthtest{\lmax > \lquarter}}  
+		{\noindent
+			\makebox[\lhalf][l]{A、#1~~~}% 
+			\makebox[\lhalf][l]{B、#2~~~}\\%
+			\makebox[\lhalf][l]{C、#3~~~}%
+		    \makebox[\lhalf][l]{D、#4~~~}\\%
+		    \makebox[\lhalf][l]{E、#5~~~}}% 
+		{\noindent
+			\makebox[\lquarter][l]{A、#1~~~}% 
+			\makebox[\lquarter][l]{B、#2~~~}%     
+			\makebox[\lquarter][l]{C、#3~~~}%
+		    \makebox[\lquarter][l]{D、#4~~~}\\%
+	        \makebox[\lquarter][l]{E、#5~~~}}
+}}
+%%\xxvi{}{}{}{}{}{} 六选项;
+\newcommand{\xxvi}[6]{\\[.5pt]
+	\settowidth{\la}{A、#1~~~}
+	\settowidth{\lb}{B、#2~~~}
+	\settowidth{\lc}{C、#3~~~}
+	\settowidth{\ld}{D、#4~~~}
+	\settowidth{\lee}{E、#5~~~}
+	\settowidth{\lf}{F、#6~~~}
+	\ifthenelse{\lengthtest{\la > \lb}}
+	{\setlength{\lmax}{\la}}{\setlength{\lmax}{\lb}}  
+	\ifthenelse{\lengthtest{\lmax < \lc}}  {\setlength{\lmax}{\lc}}  {} 
+	\ifthenelse{\lengthtest{\lmax < \ld}}  {\setlength{\lmax}{\ld}}  {} 
+	\ifthenelse{\lengthtest{\lmax < \lee}}  {\setlength{\lmax}{\lee}}  {}
+	\ifthenelse{\lengthtest{\lmax < \lf}}  {\setlength{\lmax}{\lf}}  {}
+	\setlength{\lhalf}{0.5\linewidth} 
+	\setlength{\lquarter}{0.25\linewidth}
+	\ifthenelse{\lengthtest{\lmax > \lhalf}}  
+	{\noindent{}A、#1 \\ B、#2 \\ C、#3 \\ D、#4 \\ E、#5 \\ F、#6}  {  \ifthenelse{\lengthtest{\lmax > \lquarter}}  
+		{\noindent
+			\makebox[\lhalf][l]{A、#1~~~}% 
+			\makebox[\lhalf][l]{B、#2~~~}\\%
+			\makebox[\lhalf][l]{C、#3~~~}%
+			\makebox[\lhalf][l]{D、#4~~~}\\%
+			\makebox[\lhalf][l]{E、#5~~~}%
+		    \makebox[\lhalf][l]{F、#6~~~}}% 
+		{\noindent
+			\makebox[\lquarter][l]{A、#1~~~}%
+			\makebox[\lquarter][l]{B、#2~~~}%
+			\makebox[\lquarter][l]{C、#3~~~}%
+			\makebox[\lquarter][l]{D、#4~~~}\\%
+			\makebox[\lquarter][l]{E、#5~~~}%
+		    \makebox[\lquarter][l]{F、#6~~~}}%
+}}
+%%判断题后面加括号
+\newcommand{\pd}[2][1]{\nolinebreak\dotfill\mbox{\raisebox{-1.8pt}
+		{$\cdots$}(\makebox[#1 cm][c]{
+		\ifthenelse{\boolean{printanswers}}
+		{\ifthenelse{\equal{#2}{t}}{$\surd$}{$\times$}}
+		{\hphantom{#2}}
+		})}}
+%%计算题
+\newcommand{\js}[2][4]{\par
+	\parbox[t][#1cm][t]{\linewidth}{
+		\ifthenelse{\boolean{printanswers}}{
+		\begin{spacing}{1.5}
+		解：\setlength\parindent{2em}#2
+		\end{spacing}
+		}{}
+	}
+}
+%%简答题
+\newcommand{\jd}[2][4]{\par
+\parbox[t][#1cm][t]{\linewidth}{
+	\ifthenelse{\boolean{printanswers}}{
+	\begin{spacing}{1.5}
+	答：\setlength\parindent{2em}#2
+	\end{spacing}
+	}{}
+}
+}
+%%\newcommand\cmd[参数个数]{命令的定义}
+%%简答给分点
+\newcommand{\jdgf}[1]{
+\ifthenelse{\boolean{printanswers}}{\nolinebreak\dotfill\mbox{\raisebox{-1.8pt}{$\cdots$}(#1~分)}}{}
+}
