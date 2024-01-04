@@ -1,36 +1,34 @@
-% !TEX program = xelatex
-% !Mode:: "TeX:UTF-8"
-\documentclass[12pt,twocolumn,landscape,UTF8,twoside,fontset=windows]{ctexart}%Linux下编译，首先复制windows字体到Linux
-\input{setup/package}%包含必须的宏包;
-\input{setup/format}%设置试卷格式
+% !TEX program = xelatex%使用xelatex编译器来编译TeX文件
+% !TEX encoding = UTF-8%文件的编码格式为UTF-8
+\documentclass{HUNNUexam}
 %%*========是否打印答案========
-\setboolean{printanswers}{false}%是否打印答案,false不打印答案,true打印答案
+\setboolean{printanswers}{false}%是否打印答案,false只打印答案,不打印答案;true打印答案
 %%*========页码输出格式========
 \setboolean{twopagenum}{true}%一页是否打印两个页码
 %%*========论文模板制作人========
 \author{李老师}%联系方式：ljmdzyx@163.com
-\begin{document}
 %%!========需要填入的考试科目相关信息========
-\coursecode{18160451}%课程代码
-\coursename{电子仪器与测量技术}%课程名称
-\courseyear{2018-2019}%课程年份
-\courseterm{一}%课程学期
-\specialty{应用电子技术教育专业}%专业
-\grade{2017}%年级
-\exammode{闭卷}%考核方式
-\examtime{120}%考试时量
-\examtype{A}%考核类型
-\examtitle{20}{15}{20}{15}{30}{}{}%填入各个大题的得分情况
+\newcommand{\coursecode}{18160451}%课程代码
+\newcommand{\coursename}{电子仪器与测量技术}%课程名称
+\newcommand{\courseyear}{2018-2019}%课程年份
+\newcommand{\courseterm}{一}%课程学期:第一/二学期
+\newcommand{\specialty}{电子信息工程专业}%专业
+\newcommand{\grade}{2017}%年级
+\newcommand{\exammode}{闭卷}%考核方式:开卷/闭卷
+\newcommand{\examtime}{120}%考试时量
+\newcommand{\examtype}{A}%考核类型:A/B卷
+\begin{document}
+\examtitle{20}{15}{20}{15}{30}{0}{0}%填入各个大题的得分情况,,0分表示没有该题。
 %%!=======================================
 %%========试卷正文(试卷需要命题的内容)========
 %%*========填空题命题类型========
 \makeparttk{填空题}{1}{20}%{题型名字}{每题分值}{题型总分}
 \begin{enumerate} [1.]
-	\item 数控机床由\tkkh{输入输出设备}、\tkkh{数控装置}、\tkkh{伺服系统}、\tkkh{机床本体} 和其它辅助装置等组成。%括号输出填空题
+	\item \CJKunderdot{数控机床由}\tkkh{输入输出设备}、\tkkh{数控装置}、\tkkh{伺服系统}、\tkkh{机床本体} 和其它\CJKunderline{辅助装置等组成}。%括号输出填空题
 
-	\item 数控机床按运动控制方式可分为\tkhx{点位控制数控机床}、直线控制数控机床和\tkhx{连续控制数控机床}。%横线输出填空题。
+	\item \CJKunderdblline{数控机床按运动控制方式可分}为\tkhx{点位控制数控机床}、\CJKunderwave{直线控制数控机床和}\tkhx{连续控制数控机床}。%横线输出填空题。
 
-	\item 数控编程一般有\tkkh{手工编程}和\tkkh{自动编程}两种方法。
+	\item \CJKsout{数控编程一般有}\tkkh{手工编程}和\tkkh{自动编程}两种方法。
 
 	\item 在加工中心中，F指令用于指定\tkkh{进给速度} ，S指令用于指定\tkkh{主轴转速}，T指令用于指定\tkkh{加工刀具}；其中F100表示\tkkh{进给速度为100mm/min}，S800表示\tkkh{主轴转速为800r/min}。
 
@@ -80,7 +78,7 @@
 	\item 若手轮的进给倍率旋钮选择x100，转动手轮5个脉冲，则机床移动\tkkh{0.5}mm。
 \end{enumerate}
 %%*=======判断题命题类型========
-\makepart{判断题}{3}{15}%{题型名字}{每题分值}{题型总分}
+\makepart{判断题}{1}{40}%{题型名字}{每题分值}{题型总分}
 \begin{enumerate} [1、]
 	\item 圆弧插补中，对于整圆，其起点和终点相重合，用R编程无法定义，所以只能用圆心坐标编程。\pd{t}
 	\item 用数显技术改造后的机床就是数控机床。\pd{f}
@@ -171,40 +169,55 @@
 \makepartnoteq{分析计算题}{4}{30}%{题型名字}{每题分值}{题型总分}
 \begin{enumerate} [1.]
 	\item (7分)“取中法”对刀的原理及过程。
-	      %\jd[6]设置答案间隔6cm
-	      \js[9]{用G54-G59设定工件坐标系时，可用多种方法找到工件坐标系原点在机床坐标系中的坐标，并把其坐标值输入到相应的参数中。 \jdgf{1}%下面另起一行才会首行缩进
+	      %\jd[6]设置简答题答案间隔6cm;\js[13]设置计算题答案间隔13cm
+	      \js[12]{%此段代码在答案中插入图片
 
-		      取中法对刀就是使用对刀或对刀工具接触工件上关于坐标轴对称的点，取得对称点的机床坐标，通过中点计算公式，计算出工件坐标系原点在机床坐标系中的坐标。 \jdgf{4}
+		      \centering
+		      \includegraphics[width=0.4\linewidth]{figures/1.jpg}
+		      %	\caption{刀补实例}
+		      \label{fig:1}
 
-		      取中法对刀就是使用对刀或对刀工具接触工件上关于坐标轴对称的点，取得对称点的机床坐标，通过中点计算公式，计算出工件坐标系原点在机床坐标系中的坐标。 \jdgf{7}
+
+		      用G54-G59设定工件坐标系时，可用多种方法找到工件坐标系原点在机床坐标系中的坐标，并把其坐标值输入到相应的参数中。 \bzgf{1}%下面另起一行才会首行缩进
+
+		      取中法对刀就是使用对刀或对刀工具接触工件上关于坐标轴对称的点，取得对称点的机床坐标，通过中点计算公式，计算出工件坐标系原点在机床坐标系中的坐标。 \bzgf{4}
+
+		      取中法对刀就是使用对刀或对刀工具接触工件上关于坐标轴对称的点，取得对称点的机床坐标，通过中点计算公式，计算出工件坐标系原点在机床坐标系中的坐标。 \bzgf{7}
 
 	      }
 	\item (7分)G1与G0有什么区别。
-	      \js[5]{1、指令格式不同：G1使用前必须用F设定进给速度，G0的速度与F无关； \jdgf{2}
+	      \js[5]{
+		      1、指令格式不同：G1使用前必须用F设定进给速度，G0的速度与F无关； \bzgf{2}
 
-		      2、运动轨迹不同：G0为快速定位，其路径可能为直线，也可能为折线。G1为直线插补，其路径为直线。\jdgf{4}
+		      2、运动轨迹不同：G0为快速定位，其路径可能为直线，也可能为折线。G1为直线插补，其路径为直线。\bzgf{4}
 
-		      3、进给速度不同：G0的速度由机床参数及快速倍率决定，档位少。G1的速度由F及进给倍率决定，可调档位多。\jdgf{5}
+		      3、进给速度不同：G0的速度由机床参数及快速倍率决定，档位少。G1的速度由F及进给倍率决定，可调档位多。\bzgf{5}
 
 
-		      4、功能用途不同：G0用于加工前的定位及加工后的提刀，G1用于切削加工.\jdgf{7}
+		      4、功能用途不同：G0用于加工前的定位及加工后的提刀，G1用于切削加工.\bzgf{7}
 
 	      }
 
 	\item (8分)数控机床在使用中遇到紧急情况，你可以采取哪几种手段使数控铣床立即停止运行。
-	      \jd[5]{
-		      1、使用急停；\jdgf{2}
+	      \jd[10]{%此段代码在答案中插入图片
 
-		      2、使用复位；\jdgf{4}
+		      \centering
+		      \includegraphics[width=0.5\linewidth]{figures/1.jpg}
+		      %\caption{刀补实例}
+		      \label{fig:2}
 
-		      3、进给保持；\jdgf{6}
+		      1、使用急停；\bzgf{2}
 
-		      4、机床电源；\jdgf{8}
+		      2、使用复位；\bzgf{4}
+
+		      3、进给保持；\bzgf{6}
+
+		      4、机床电源；\bzgf{8}
 	      }
 	\item (8分)你是怎样开机的。
-	      \jd[5]{开机：开机前检查——外部电源——机床电源——取消急停——复位——回零\jdgf{4}
+	      \jd[5]{开机：开机前检查——外部电源——机床电源——取消急停——复位——回零\bzgf{4}
 
-		      回零：回零方式——调节快速倍率——Z+——X+——Y+——各轴指示灯亮；\jdgf{8}
+		      回零：回零方式——调节快速倍率——Z+——X+——Y+——各轴指示灯亮；\bzgf{8}
 	      }
 \end{enumerate}
 \newpage
@@ -216,32 +229,32 @@
 		      \centering
 		      \includegraphics[width=0.5\linewidth]{figures/1.jpg}
 		      %	\caption{刀补实例}
-		      \label{fig:1}
+		      \label{fig:3}
 	      \end{figure}
 	      \jd[5]{
-		      样例样例样例\jdgf{3}
+		      样例样例样例\bzgf{3}
 
-		      样例样例样例\jdgf{6}
+		      样例样例样例\bzgf{6}
 
-		      样例样例样例\jdgf{9}
+		      样例样例样例\bzgf{9}
 
-		      样例样例样例\jdgf{12}
+		      样例样例样例\bzgf{12}
 
-		      样例样例样例\jdgf{15}
+		      样例样例样例\bzgf{15}
 
 	      }
 	      \newpage
 	\item 更改下面程序中的错误，加工80*60的方，四角倒R8的圆。
 	      \jd[5]{
-		      样例样例样例\jdgf{3}
+		      样例样例样例\bzgf{3}
 
-		      样例样例样例\jdgf{6}
+		      样例样例样例\bzgf{6}
 
-		      样例样例样例\jdgf{9}
+		      样例样例样例\bzgf{9}
 
-		      样例样例样例\jdgf{12}
+		      样例样例样例\bzgf{12}
 
-		      样例样例样例\jdgf{15}
+		      样例样例样例\bzgf{15}
 
 	      }
 \end{enumerate}
